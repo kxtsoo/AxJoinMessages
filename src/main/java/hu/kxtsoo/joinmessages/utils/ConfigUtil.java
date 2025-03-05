@@ -7,12 +7,10 @@ import dev.dejvokep.boostedyaml.settings.general.GeneralSettings;
 import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 import hu.kxtsoo.joinmessages.AxJoinMessages;
-import org.bukkit.Material;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class ConfigUtil {
 
@@ -20,16 +18,11 @@ public class ConfigUtil {
     public static ConfigUtil configUtil;
     private YamlDocument config;
     private YamlDocument messages;
-    private YamlDocument hooks;
-
-    private final Map<Material, String> blockGroupMapping = new HashMap<>();
 
     public ConfigUtil(AxJoinMessages plugin) {
         this.plugin = plugin;
         setupConfig();
         setupMessages();
-        loadBlockGroups();
-        setupHooks();
     }
 
     public void setupConfig() {
@@ -95,118 +88,12 @@ public class ConfigUtil {
         return "Invalid message format";
     }
 
-    public void setupHooks() {
-        try {
-            File hooksFile = new File(plugin.getDataFolder(), "hooks.yml");
-            if (!hooksFile.exists()) {
-                plugin.saveResource("hooks.yml", false);
-            }
-
-            hooks = YamlDocument.create(hooksFile,
-                    Objects.requireNonNull(plugin.getResource("hooks.yml")),
-                    GeneralSettings.builder().setUseDefaults(false).build(),
-                    LoaderSettings.DEFAULT, DumperSettings.DEFAULT,
-                    UpdaterSettings.builder().setKeepAll(true)
-                            .setVersioning(new BasicVersioning("version")).build());
-
-            hooks.update();
-        } catch (IOException ex) {
-            plugin.getLogger().severe("Error loading or creating hooks.yml: " + ex.getMessage());
-        }
-    }
-
     public YamlDocument getConfig() {
         return config;
-    }
-
-    public YamlDocument getHooks() {
-        return hooks;
     }
 
     public void reloadConfig() {
         setupConfig();
         setupMessages();
-        loadBlockGroups();
     }
-
-    private void loadBlockGroups() {
-        blockGroupMapping.clear();
-
-        var limitsSection = config.getSection("limits");
-        if (limitsSection == null) {
-            plugin.getLogger().warning("The 'limits' section is missing in the config.yml.");
-            return;
-        }
-
-        Set<Object> limitKeys = limitsSection.getKeys();
-        if (limitKeys == null || limitKeys.isEmpty()) {
-            plugin.getLogger().warning("No keys found in the 'limits' section of the config.yml.");
-            return;
-        }
-
-        for (Object key : limitKeys) {
-            if (!(key instanceof String)) {
-                plugin.getLogger().warning("Invalid key in 'limits' section: " + key);
-                continue;
-            }
-
-            String groupKey = (String) key;
-            String[] blocks = groupKey.split("\\+");
-
-            for (String block : blocks) {
-                Material material = Material.matchMaterial(block);
-                if (material != null) {
-                    blockGroupMapping.put(material, groupKey);
-                } else {
-                    plugin.getLogger().warning("Invalid material in config: " + block);
-                }
-            }
-        }
-    }
-
-    public String getGroupKey(Material material) {
-        return blockGroupMapping.getOrDefault(material, material.toString());
-    }
-
-    public List<Material> getGroupMaterials(String groupKey) {
-        String[] blocks = groupKey.split("\\+");
-        return Arrays.stream(blocks)
-                .map(Material::matchMaterial)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
-    }
-
-    public Map<String, List<Material>> getConfiguredGroups() {
-        Map<String, List<Material>> groups = new HashMap<>();
-
-        var limitsSection = config.getSection("limits");
-        if (limitsSection == null) {
-            plugin.getLogger().warning("The 'limits' section is missing in the config.yml.");
-            return groups;
-        }
-
-        Set<Object> limitKeys = limitsSection.getKeys();
-        if (limitKeys == null || limitKeys.isEmpty()) {
-            plugin.getLogger().warning("No keys found in the 'limits' section of the config.yml.");
-            return groups;
-        }
-
-        for (Object key : limitKeys) {
-            if (!(key instanceof String)) {
-                plugin.getLogger().warning("Invalid key in 'limits' section: " + key);
-                continue;
-            }
-
-            String groupKey = (String) key;
-            List<Material> groupMaterials = getGroupMaterials(groupKey);
-            if (!groupMaterials.isEmpty()) {
-                groups.put(groupKey, groupMaterials);
-            } else {
-                plugin.getLogger().warning("No valid materials found for group: " + groupKey);
-            }
-        }
-
-        return groups;
-    }
-
 }

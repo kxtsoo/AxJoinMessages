@@ -1,0 +1,59 @@
+prefix: "&#45FFC3&lA&#50FFC1&lx&#5BFFC0&lJ&#66FFBE&lo&#70FEBC&li&#7BFEBB&ln&#86FEB9&lM&#91FEB7&le&#9CFEB5&ls&#A7FEB4&ls&#B1FDB2&la&#BCFDB0&lg&#C7FDAF&le&#D2FDAD&ls &7» "
+
+options:
+  # You want to disable the default
+  # yellow join/leave messages?
+  vanilla-join-message: true
+  # Recommended to keep on true.
+  use-priorities: true
+  hooks:
+    # If vanished player join the welcome message
+    # will not show up for the players.
+    vanish-plugin: PremiumVanish
+    register:
+      PremiumVanish: true
+
+# Join Messages
+join-messages:
+  messages:
+    mvp+:
+      enabled: true
+      permission: "axjoinmessages.join.mvp+"
+      priority: 10
+      message:
+        - "&#45D2FF&l[&#5ADBF7&lM&#6FE3F0&lV&#83ECE8&lP&#98F4E1&l+&#ADFDD9&l] &f%player%, MVP+ player has joined the server!"
+    mvp:
+      enabled: true
+      permission: "axjoinmessages.join.mvp"
+      priority: 5
+      message:
+        - "&#45FFC3&l[&#68FFBE&lM&#8CFEB8&lV&#AFFEB3&lP&#D2FDAD&l] &f%player%, MVP player has joined the server!"
+    vip:
+      enabled: true
+      permission: "axjoinmessages.join.vip"
+      priority: 1
+      message:
+        - "&#F5FF45&l[&#F7F04D&lV&#F9E055&lI&#FAD15D&lP&#FCC165&l] &f%player%, VIP player has joined the server!"
+
+# Leave Messages
+leave-messages:
+  messages:
+    mvp+:
+      enabled: true
+      permission: "axjoinmessages.leave.mvp+"
+      priority: 10
+      message:
+        - "&#45D2FF&l[&#5ADBF7&lM&#6FE3F0&lV&#83ECE8&lP&#98F4E1&l+&#ADFDD9&l] &f%player%, MVP+ player has left the server."
+    mvp:
+      enabled: true
+      permission: "axjoinmessages.leave.mvp"
+      priority: 5
+      message:
+        - "&#45FFC3&l[&#68FFBE&lM&#8CFEB8&lV&#AFFEB3&lP&#D2FDAD&l] &f%player%, MVP player has left the server."
+    vip:
+      enabled: true
+      permission: "axjoinmessages.leave.vip"
+      priority: 1
+      message:
+        - "&#F5FF45&l[&#F7F04D&lV&#F9E055&lI&#FAD15D&lP&#FCC165&l] &f%player%, VIP player has left the server."
+version: 1

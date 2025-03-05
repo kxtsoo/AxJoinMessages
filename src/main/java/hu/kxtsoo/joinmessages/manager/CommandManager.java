@@ -19,4 +19,8 @@ public class CommandManager {
     public void registerCommands() {
         commandManager.registerCommand(new ReloadCommand());
     }
+
+    public void shutdown() {
+        commandManager.unregisterCommands();
+    }
 }

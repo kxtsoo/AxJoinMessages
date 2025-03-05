@@ -1,0 +1,7 @@
+messages:
+  command-only-for-players: "%prefix% &cThis command can only be used by players."
+
+  reload-command:
+    success: "%prefix% &aThe plugin files has been reloaded."
+
+version: '1'

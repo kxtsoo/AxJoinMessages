@@ -9,15 +9,14 @@ import org.bukkit.command.CommandSender;
 
 import java.sql.SQLException;
 
-@Command("axblocklimiter")
-@Permission("axblocklimiter.admin")
+@Command("axjoinmessages")
+@Permission("axjoinmessages.admin")
 public class ReloadCommand extends BaseCommand {
 
     @SubCommand("reload")
-    @Permission("axblocklimiter.admin.reload")
+    @Permission("axjoinmessages.admin.reload")
     public void reload(CommandSender sender) throws SQLException {
         AxJoinMessages.getInstance().getConfigUtil().reloadConfig();
-
         sender.sendMessage(AxJoinMessages.getInstance().getConfigUtil().getMessage("messages.reload-command-success"));
     }
 }
